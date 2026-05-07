@@ -1,0 +1,42 @@
+{% extends 'tickets/base.html' %}
+
+{% block content %}
+<h2>Дашборд</h2>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Последние заявки</div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr><th>ID</th><th>Компетенция</th><th>Приоритет</th><th>Статус</th><th>Инженер</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                        <tr class="{% if ticket.status == 'violated' %}violated{% endif %}">
+                            <td>{{ ticket.id }}</td>
+                            <td>{{ ticket.required_competence.name }}</td>
+                            <td>{{ ticket.get_priority_display }}</td>
+                            <td>{{ ticket.get_status_display }}</td>
+                            <td>{{ ticket.assigned_engineer.name|default:"—" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Инженеры</div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for eng in engineers %}
+                    <li class="list-group-item">{{ eng.name }} ({{ eng.work_start }} - {{ eng.work_end }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

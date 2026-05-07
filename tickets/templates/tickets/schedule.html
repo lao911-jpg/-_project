@@ -1,0 +1,38 @@
+{% extends 'tickets/base.html' %}
+
+{% block content %}
+<h2>Расписание заявок</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Компетенция</th>
+            <th>Приоритет</th>
+            <th>Инженер</th>
+            <th>Начало</th>
+            <th>Окончание</th>
+            <th>Дедлайн</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ticket in tickets %}
+        <tr class="{% if ticket.status == 'violated' %}violated{% endif %}">
+            <td>{{ ticket.id }}</td>
+            <td>{{ ticket.required_competence.name }}</td>
+            <td class="{{ ticket.priority }}-priority">{{ ticket.get_priority_display }}</td>
+            <td>{{ ticket.assigned_engineer.name|default:"Не назначен" }}</td>
+            <td>{{ ticket.start_time|date:"d.m H:i"|default:"—" }}</td>
+            <td>{{ ticket.end_time|date:"d.m H:i"|default:"—" }}</td>
+            <td>{{ ticket.sla_deadline|date:"d.m H:i" }}</td>
+            <td>
+                <a href="{% url 'reassign_ticket' ticket.id %}" class="btn btn-sm btn-warning">Переназначить</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="8">Нет активных заявок</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'add_ticket' %}" class="btn btn-primary">+ Новая заявка</a>
+{% endblock %}

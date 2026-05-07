@@ -1,0 +1,26 @@
+{% extends 'tickets/base.html' %}
+
+{% block content %}
+<h2>Новая заявка</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label class="form-label">Требуемая компетенция</label>
+        <select name="competence" class="form-select" required>
+            {% for comp in competences %}
+            <option value="{{ comp.id }}">{{ comp.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Приоритет</label>
+        <select name="priority" class="form-select" required>
+            <option value="low">Низкий (2 дня)</option>
+            <option value="medium">Средний (4 часа)</option>
+            <option value="high">Высокий (1 час)</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Создать и назначить</button>
+    <a href="{% url 'schedule' %}" class="btn btn-secondary">Отмена</a>
+</form>
+{% endblock %}
